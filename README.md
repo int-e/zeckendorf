@@ -1,8 +1,8 @@
-# Zeckendorf Arithmetic and Finite Automata
+## Zeckendorf Arithmetic and Finite Automata
 
 An exploration.
 
-## Files
+### Files
 
 - `Automaton.hs` -- implements finite automata
 - `CodeGen.hs` -- generate Haskell code from automata
@@ -11,7 +11,7 @@ An exploration.
 - `NegaZeckendorf.hs` -- Nega-Zeckendorf arithmetic
 - `Util.hs` -- useful functions
 
-## Overview
+### Overview
 
 We write Zeckendorf numbers with the least significant bit to the left.
 
@@ -42,7 +42,7 @@ is projected to its input values. The result is made deterministic
 again. For each state of the resulting automaton, a transition
 function is generated that also tracks the possible output sequences.
 
-## Todo
+### Todo
 
 - expand explanation
 - some documentation
