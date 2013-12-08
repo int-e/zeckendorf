@@ -10,6 +10,7 @@ An exploration.
 - `Zeckendorf.hs` -- Zeckendorf arithmetic
 - `NegaZeckendorf.hs` -- Nega-Zeckendorf arithmetic
 - `Util.hs` -- useful functions
+- `simps.hs` -- collects generated code for reference
 
 ### Overview
 
