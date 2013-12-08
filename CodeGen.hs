@@ -30,9 +30,9 @@ generate fun aut =
 
     aux = map (FunBind . stateFun) (S.toList $ states autP)
 
-    match fun ps rhs = Match l fun ps Nothing (UnGuardedRhs rhs) (BDecls [])
     stateFun s0 = [m0] ++ map step is where
         ss = S.toList (renP s0)
+        match fun ps rhs = Match l fun ps Nothing (UnGuardedRhs rhs) (BDecls [])
         m0 = match (cn s0)
             ([[pat| __rs__ |] | s <- ss, let rs = r s] ++ [[pat| [] |]])
             rhs0
@@ -47,7 +47,6 @@ generate fun aut =
             ([[pat| __rs__ |] | s <- ss, let rs = r s] ++ [pxs])
             rhs
           where
-            -- [pat| $(intP l)
             pxs = PInfixApp (intP (fromIntegral l)) (Special Cons) (pvar (Ident "xs"))
             [sn] = [s' | (s,l',s') <- trans autP, s == s0, l' == l]
             s = c sn
