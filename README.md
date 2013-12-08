@@ -36,11 +36,11 @@ carries. A transition from one state to another is allowed if the
 carries fit together. Transitions are labeled by pairs `(i,o)` of
 possible input / output value pairs.
 
-The resulting automaton is then simplified and made deterministic.
-Since the output values are unknown, we project the resulting automaton
-is projected to its input values. The result is made deterministic
-again. For each state of the resulting automaton, a transition
-function is generated that also tracks the possible output sequences.
+That automaton is then simplified and made deterministic. Since the output
+values are unknown, we project the resulting automaton to its input values.
+The result is made deterministic again. For each state of this third
+automaton, a transition function is generated that also tracks the possible
+output sequences.
 
 ### Todo
 
