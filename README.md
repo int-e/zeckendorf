@@ -15,19 +15,19 @@ An exploration.
 
 We write Zeckendorf numbers with the least significant bit to the left.
 
-> z:101001 = 1*1 + 0*2 + 1*3 + 0*5 + 0*8 + 1*13 = 17
+    z:101001 = 1*1 + 0*2 + 1*3 + 0*5 + 0*8 + 1*13 = 17
 
 The key observation---which is by no means obvious---is that when adding
 or subtracting (Nega-)Zeckendorf numbers, carries are limited to -1 and 1.
 For example,
 
->   z:10001
-> + z:00101
->   z:10102   (result before carries)
->      +-+-+  (carries, + = 1, - = -1)
->     -+-+-   (carries negated and shifted left)
->    -+-+-    (carries negated and shifted left twice)
-> = z:010101  (result after adding carries)
+      z:10001
+    + z:00101
+      z:10102   (result before carries)
+         +-+-+  (carries, + = 1, - = -1)
+        -+-+-   (carries negated and shifted left)
+       -+-+-    (carries negated and shifted left twice)
+    = z:010101  (result after adding carries)
 
 In `TH.hs`, `makeAutomaton` introduces an initial state `(0,[],0)`
 and states `(i,cs,o)` where `i` is an input value (0..2), `o` is an
