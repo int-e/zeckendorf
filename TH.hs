@@ -11,24 +11,21 @@ import Util
 
 makeAutomaton ::
     [Int] -> (Int -> Int -> Int -> Bool) -> (Int -> Int -> Bool) ->
-    (Int -> Int -> Int -> Int -> Int) -> Automaton ([Int],Int) (Int,Int)
+    (Int -> Int -> Int -> Int -> Int) -> Automaton (Int,[Int],Int) (Int,Int)
 makeAutomaton is check0 checkt out =
-    Automaton{ inits = [([],0)], finals = S.toList fs, trans = ts }
+    Automaton{ inits = [(0,[],0)], finals = S.toList fs, trans = ts }
   where
-    fs = closure (S.fromList . (>>= next) . S.toList) (S.singleton ([0,0,0],0))
+    fs = closure (S.fromList . (>>= next) . S.toList) (S.singleton (0,[0,0,0],0))
     next s0 = [s | (s,(0,0),s') <- ts, s' == s0]
-    ts = [((l,o),(i',o'),(l',o')) |
+    ts = [(s,(i',o'),s') |
             s@(i,l,o) <- states,
             s'@(i',l',o') <- states,
             tail l == init l',
             checkt i i',
             o+o' <= 1] ++
-        [(([],0),(i,o),([c,d,e],o)) |
-            i <- is,
-            [c,d,e] <- replicateM 3 [-1..1],
-            check0 c d e,
-            let o = out i c d e,
-            0 <= o && o <= 1]
+        [((0,[],0),(i,o),s') |
+            s'@(i,[c,d,e],o) <- states,
+            check0 c d e]
     states = [(i,[c,d,e],o) |
             i <- is,
             [c,d,e] <- replicateM 3 [-1..1],
