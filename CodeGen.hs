@@ -9,8 +9,6 @@ import Automaton
 import Language.Haskell.Exts.QQ -- https://github.com/int-e/haskell-src-exts-qq
 import Util
 
-import Debug.Trace
-
 generate :: Ord s => String -> Automaton s (Int,Int) -> [Decl]
 generate fun aut =
     [[dec| __fun__ :: [Int] -> [Int] |],
