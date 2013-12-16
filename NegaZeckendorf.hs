@@ -10,8 +10,9 @@ type Z = [Int]
 -- Conversion
 val :: Integral a => Z -> a
 val zs = go 0 0 1 zs where
-    go !n a b (z:zs) | z < 0 || z > 1 = error "invalid"
-    go !n a b (1:1:zs) = error "invalid"
+    go !n a b (z:zs) | z < 0 || z > 1 = error "invalid: digit out of range"
+    go !n a b [0] = error "invalid: trailing zero"
+    go !n a b (1:1:zs) = error "invalid: consecutive ones"
     go !n a b (z:zs) = go (fromIntegral z * b + n) b (a - b) zs
     go !n _ _ _      = n
 
