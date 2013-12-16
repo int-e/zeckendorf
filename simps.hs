@@ -1,7 +1,5 @@
 -- Simplification functions
 
--- TODO: simpSubP, simpAddN and simpSubN do not remove all leading zeros.
-
 -- Zeckendorf addition, manually optimized
 simpAddM :: [Int] -> [Int]
 simpAddM xs = c0 xs id where
