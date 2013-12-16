@@ -11,26 +11,28 @@ import Util
 
 makeAutomaton ::
     [Int] -> (Int -> Int -> Int -> Bool) -> (Int -> Int -> Bool) ->
-    (Int -> Int -> Int -> Int -> Int) -> Automaton (Int,[Int],Int) (Int,Int)
-makeAutomaton is check0 checkt out =
-    Automaton{ inits = [(0,[],0)], finals = S.toList fs, trans = ts }
+    (Int -> Int -> Int -> Int -> Int) ->
+    Automaton (Int,[Int],Maybe Int) (Int,Maybe Int)
+makeAutomaton vs check0 checkt out =
+    Automaton{ inits = is, finals = fs, trans = ts }
   where
-    fs = closure (S.fromList . (>>= next) . S.toList) (S.singleton (0,[0,0,0],0))
-    next s0 = [s | (s,(0,0),s') <- ts, s' == s0]
+    is = [s | s@(i,[_,c,d],o) <- states, i == 0, val o == 0, check0 c d undefined]
+    fs = [(0,[0,0,0],Nothing)]
+    val = maybe 0 id
     ts = [(s,(i',o'),s') |
             s@(i,l,o) <- states,
             s'@(i',l',o') <- states,
+            o /= Nothing || o' == Nothing,
+            o /= Just 0 || o' /= Nothing,
             tail l == init l',
             checkt i i',
-            o+o' <= 1] ++
-        [((0,[],0),(i,o),s') |
-            s'@(i,[c,d,e],o) <- states,
-            check0 c d e]
-    states = [(i,[c,d,e],o) |
-            i <- is,
+            val o + val o' <= 1]
+    states = [(i,[c,d,e],o') |
+            i <- vs,
             [c,d,e] <- replicateM 3 [-1..1],
             let o = out i c d e,
-            0 <= o && o <= 1]
+            0 <= o && o <= 1,
+            o' <- [Nothing | o == 0] ++ [Just o]]
 
 splice :: [Decl] -> TH.Q [TH.Dec]
 splice = return . toDecs

@@ -4,12 +4,13 @@ module CodeGen (
 ) where
 
 import Language.Haskell.Exts
+import Language.Haskell.Exts.QQ
+import Control.Applicative
 import qualified Data.Set as S
 import Automaton
-import Language.Haskell.Exts.QQ -- https://github.com/int-e/haskell-src-exts-qq
 import Util
 
-generate :: Ord s => String -> Automaton s (Int,Int) -> [Decl]
+generate :: Ord s => String -> Automaton s (Int,Maybe Int) -> [Decl]
 generate fun aut =
     [[dec| __fun__ :: [Int] -> [Int] |],
      patch [dec| __fun__ = $(ci) where n f c = f . (c:) |]]
@@ -49,9 +50,13 @@ generate fun aut =
             [sn] = [s' | (s,l',s') <- trans autP, s == s0, l' == l]
             s = c sn
             rhs = app [hs| __s__ |] $
-                [[hs| n __r__ $o |] | i <- S.toList (renP sn),
-                 let [(r,o)] = (ri i)] ++
+                [e | i <- S.toList (renP sn),
+                 let [(r,o)] = (ri i),
+                 let e = case o of
+                         Just o  -> [hs| n __r__ $o |]
+                         Nothing -> [hs| __r__ |]
+                 ] ++
                 [[hs| xs |]]
-            ri i = [(r j, intE (fromIntegral o)) |
+            ri i = [(r j, intE . fromIntegral <$> o) |
                     (j,(l',o),i') <- trans autF,
                     i == i', l == l', j `S.member` renP s0]
