@@ -46,10 +46,19 @@ addP = generate "simpAdd" $ makeAutomaton [0..2] check0 checkt out where
     out i c d e = i + c - d - e
     checkt i i' = i + i' <= 2
 
-subP = generate "simpSub" $ makeAutomaton [-1..1] check0 checkt out where
+subP = generate "simpSub" $ z $ makeAutomaton [-1..1] check0 checkt out where
     check0 c d e = c == -d
     out i c d e = i + c - d - e
     checkt i i' = i * i' /= 1
+    z aut@Automaton{ inits = is, finals = fs, trans = ts } =
+        aut{ inits = is ++ is', finals = fs ++ fs', trans = ts ++ ts' }
+      where
+        s0 = (0,[],Nothing)
+        s1 = (1,[],Nothing)
+        is' = [s0]
+        fs' = [s1]
+        ts' = [(s0,(i,Nothing),s0) | i <- [-1..1]] ++
+              [(s0,(-1,Nothing),s1),(s1,(0,Nothing),s1)]
 
 addN = generate "simpAdd" $ makeAutomaton [0..2] check0 checkt out where
     check0 c d e = c == 0

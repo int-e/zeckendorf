@@ -58,5 +58,5 @@ mul xs = go [] xs xs where
 -- Tests
 prop0 a   = a >= 0           ==> val (zek a) == (a :: Integer)
 prop1 a b = a >= 0 && b >= 0 ==> val (add (zek a) (zek b)) == (a + b :: Integer)
-prop2 a b = a >= b && b >= 0 ==> val (sub (zek a) (zek b)) == (a - b :: Integer)
+prop2 a b = a >= 0 && b >= 0 ==> val (sub (zek a) (zek b)) == max 0 (a - b :: Integer)
 prop3 a b = a >= 0 && b >= 0 ==> val (mul (zek a) (zek b)) == (a * b :: Integer)
