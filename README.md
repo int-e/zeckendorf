@@ -2,6 +2,13 @@
 
 An exploration.
 
+### Requirements
+
+- haskell-src-exts-qq from https://github.com/int-e/haskell-src-exts-qq
+  (pulls in haskell-src-meta and haskell-src-exts)
+- QuickCheck
+- containers
+
 ### Files
 
 - `Automaton.hs` -- implements finite automata
@@ -48,4 +55,3 @@ output sequences.
 
 - expand explanation
 - some documentation
-- eliminate leading zeros (except for Zeckendorf addition)
