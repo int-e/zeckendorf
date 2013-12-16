@@ -10,6 +10,17 @@ import qualified Data.Set as S
 import Automaton
 import Util
 
+-- | Generate code from an automaton.
+--
+-- The symbols are pairs @(Int,Maybe Int)@, where the first component
+-- is an input value (e.g. 0..2 from addition), the second component
+-- is an output character or 'Nothing' if we are at the end of output.
+--
+-- In case that the input list is exhausted, a 0 is appended.
+--
+-- The projection of the automaton to its first component is assumed to
+-- be unambiguous. This ensures that the pattern match marked by !!! below
+-- always succeeds.
 generate :: Ord s => String -> Automaton s (Int,Maybe Int) -> [Decl]
 generate fun aut =
     [[dec| __fun__ :: [Int] -> [Int] |],
@@ -51,7 +62,7 @@ generate fun aut =
             s = c sn
             rhs = app [hs| __s__ |] $
                 [e | i <- S.toList (renP sn),
-                 let [(r,o)] = (ri i),
+                 let [(r,o)] = (ri i), -- !!!
                  let e = case o of
                          Just o  -> [hs| n __r__ $o |]
                          Nothing -> [hs| __r__ |]
